@@ -37,6 +37,7 @@ class YamlLint
     @file = file
     @config = config
     @config[:quiet] = true if @config[:veryquiet]
+    @config[:nocheckfileext] ||= false
   end
 
   def do_lint
@@ -63,7 +64,7 @@ class YamlLint
   end
 
   def parse_file(file)
-    unless File.extname(file) =~ /.(yaml|yml)$/
+    if (not File.extname(file) =~ /.(yaml|yml)$/) && (not @config[:nocheckfileext])
       error "The extension of the file #{file} should be .yaml or .yml"
       return 1
     end
